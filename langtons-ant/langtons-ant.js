@@ -1,5 +1,5 @@
 width = innerWidth - 300;
-height = innerHeight - 120;
+height = innerHeight - 70;
 
 let canvas = document.createElement("canvas");
 canvas.width = width;
@@ -105,7 +105,7 @@ function setRuleColors(){
 
 function setTiles(){
 	tiles = [];
-	ctx.fillStyle = "#000000";
+	ctx.fillStyle = "#e5e5e5";
 	for(let i = 0; i < height / tileWidth; i++){
 		tiles[i] = new Array();
 		for(let j = 0; j < width / tileWidth; j++){

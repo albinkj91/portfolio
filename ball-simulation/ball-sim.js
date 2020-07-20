@@ -1,5 +1,5 @@
 let width = innerWidth;
-let height = innerHeight - 120;
+let height = innerHeight - 70;
 
 let canvas = document.createElement("canvas");
 canvas.id = "canvas";
@@ -53,8 +53,6 @@ class Ball{
 		ctx.beginPath();
 		ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
 		ctx.stroke();
-
-		ctx.fillText("FPS: " + frameCount, 50, 50);
 	}
 
 	move(){
@@ -65,7 +63,7 @@ class Ball{
 		this.y += this.vector.y * 0.001;
 
 		if(this.y > 714 && Math.abs(this.vector.x) > 0){
-			this.vector.x -= this.vector.x * 0.005;
+			this.vector.x -= this.vector.x * 0.003;
 			console.log(this.vector.x);
 		}
 		console.log(this.x);
@@ -119,12 +117,10 @@ function render(){
 	elapsed = now - then;
 
 	if(elapsed > fpsInterval){
-		frameCount = Math.floor(1000 / (now - then));
 		then = now - (elapsed % fpsInterval);
 	}
 }
 
-let frameCount = 0;
 let fps = 60;
 let fpsInterval = 1000 / fps;
 let then = performance.now();
@@ -143,13 +139,14 @@ let heldBall;
 let mouseStartX;
 let mouseStartY;
 let mouseDown = false;
+const colors = ["#fca311", "#14213D"];
 
 canvas.addEventListener("mousedown", event => {
 	if(mouseDown){
 		return;
 	}
 
-	heldBall = new Ball(event.offsetX, event.offsetY, 50, new Vector(0, 0), 0, "#fca311");
+	heldBall = new Ball(event.offsetX, event.offsetY, 50, new Vector(0, 0), 0, colors[Math.floor(Math.random() * 2)]);
 	balls.push(heldBall);
 	mouseStartX = event.offsetX;
 	mouseStartY = event.offsetY;

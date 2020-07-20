@@ -1,4 +1,4 @@
-let width = innerWidth - 300;
+let width = innerWidth;
 let height = innerHeight - 120;
 
 let canvas = document.createElement("canvas");
@@ -7,7 +7,7 @@ canvas.height = height;
 canvas.id = "canvas";
 let ctx = canvas.getContext("2d");
 document.querySelector("#content").appendChild(canvas);
-ctx.strokeStyle = "#fca311";
+ctx.strokeStyle = "#14213D";
 
 ctx.lineWidth = 1;
 
@@ -18,6 +18,7 @@ let angle = toRadians(270);
 let degrees = 0;
 let interval;
 let running = false;
+let expanding = true;
 
 ctx.beginPath();
 fractalTree(angle, currentX, currentY, startRadius);
@@ -41,28 +42,26 @@ function fractalTree(newAngle, x, y, newRadius){
 	}
 }
 
-function start(){
-	if(!running){
-		interval = setInterval(increaseDegree, 10);
-		running = true;
-	}
-}
-
-function stop(){
-	clearInterval(interval);
-	running = false;
-}
-
 function increaseDegree(){
-	ctx.clearRect(0, 0, width, height);
-	degrees += 0.05;
+	ctx.clearRect(0, 0, width, height)
+	if(degrees < 30 && expanding){
+		degrees += 0.05;
+	}else{
+		expanding = false;
+	}
+	if(degrees > -30 && !expanding){
+		degrees -= 0.05;
+	}else{
+		expanding = true;
+	}
+	
 	ctx.beginPath();
 	fractalTree(angle, currentX, currentY, startRadius);
 	ctx.stroke();
 }
 
-
-
 function toRadians(number){
 	return number * (Math.PI / 180);
 }
+
+setInterval(increaseDegree, 10);

@@ -1,5 +1,5 @@
 body{
-	background-color: #000000;
+	background-color: #e5e5e5;
 }
 
 #controls{
@@ -14,11 +14,11 @@ input{
 }
 
 input:hover{
-	background-color: #ffffff;
+	background-color: #f0f0f0;
 }
 
 input:focus{
-	background-color: #ffffff;
+	background-color: #f0f0f0;
 }
 
 #run{
@@ -68,5 +68,6 @@ button::-moz-focus-inner{
 }
 
 #count{
-	color: white;
+	color: #000000;
+	margin-left: 10px;
 }
