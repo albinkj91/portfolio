@@ -1,0 +1,72 @@
+body{
+	background-color: #000000;
+}
+
+#controls{
+	width: 260px;
+	float: left;
+}
+
+input{
+	margin: 10px;
+	padding: 5px;
+	background-color: #e5e5e5;
+}
+
+input:hover{
+	background-color: #ffffff;
+}
+
+input:focus{
+	background-color: #ffffff;
+}
+
+#run{
+	background-color: #14213D;
+	color: #ffffff;
+}
+
+#run:hover{
+	background-color: #40506d;
+}
+
+#stop{
+	background-color: #40506d;
+	color: #ffffff;
+}
+
+#stop:hover{
+	background-color: #14213D;
+}
+
+#clear{
+	background-color: #FCA311;
+}
+
+#clear:hover{
+	background-color: #fcc341;
+}
+
+button{
+	width: 100px;
+	margin: 10px;
+	padding: 7px;
+	border: none;
+	border-radius: 2px;
+}
+
+button:active{
+	background-color: #aaffaa;
+}
+
+button::-moz-focus-inner{
+	border: none;
+}
+
+#content{
+	float: right;
+}
+
+#count{
+	color: white;
+}

@@ -1,0 +1,13 @@
+body{
+	background-color: black;
+	padding: 0;
+	margin: 0;
+}
+
+#content{
+	margin: auto;
+}
+
+#canvas{
+	background-color: #14213D;
+}

@@ -1,0 +1,45 @@
+body{
+	background-color: #000000;
+}
+
+#content{
+	float: right;
+}
+
+#controls{
+	width: 260px;
+	float: left;
+}
+
+canvas{
+	background-color: #000000;
+}
+
+input{
+	width: 1000px;
+}
+
+button{
+	width: 100px;
+	margin: 10px;
+	padding: 7px;
+	border: none;
+	border-radius: 2px;
+}
+
+#start{
+	background-color: #14213D;
+	color: #ffffff;
+}
+
+#start:hover{
+	background-color: #40506d;
+}
+
+#stop{
+	background-color: #fca311;
+}
+
+#stop:hover{
+	background-color: #fcc341;
+}
