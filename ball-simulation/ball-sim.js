@@ -63,6 +63,12 @@ class Ball{
 
 		this.x += this.vector.x * 0.01;
 		this.y += this.vector.y * 0.01;
+
+		if(this.y > 714 && Math.abs(this.vector.x) > 0){
+			this.vector.x -= this.vector.x * 0.01;
+			console.log(this.vector.x);
+		}
+		console.log(this.x);
 	}
 
 	checkBounds(){

@@ -46,7 +46,7 @@ function checkCloseNodesAndDraw(){
 			let deltaY = Math.abs(nodes[i].y - nodes[j].y);
 
 			let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-			ctx.strokeStyle = "rgba(0, 0, 0," + (1 - distance / 300)  + ")";
+			ctx.strokeStyle = "rgba(0, 0, 0," + (1 - distance / 300) + ")";
 			ctx.beginPath();
 			ctx.moveTo(nodes[i].x, nodes[i].y);
 			ctx.lineTo(nodes[j].x, nodes[j].y);
