@@ -103,27 +103,18 @@ class Ball{
 	}
 }
 
-function update(){
-	ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-	balls.forEach(ball => ball.move());
-	balls.forEach(ball => ball.checkBounds());
-	balls.forEach(ball => ball.draw(ctx));
-}
-
 function render(){	
+	balls.forEach(ball => ball.draw(ctx));
 	requestAnimationFrame(render);
-
-	now = performance.now();
-	elapsed = now - then;
-
-	if(elapsed > fpsInterval){
-		then = now - (elapsed % fpsInterval);
-	}
 }
 
 function start(){
 	requestAnimationFrame(render);
-	setInterval(update, 1);
+	setInterval(() => {
+		ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+		balls.forEach(ball => ball.move());
+	}, 1);
+	setInterval(() => balls.forEach(ball => ball.checkBounds()), 1);
 }
 
 let fps = 60;
