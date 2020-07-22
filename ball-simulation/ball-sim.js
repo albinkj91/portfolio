@@ -121,6 +121,11 @@ function render(){
 	}
 }
 
+function start(){
+	requestAnimationFrame(render);
+	setInterval(update, 1);
+}
+
 let fps = 60;
 let fpsInterval = 1000 / fps;
 let then = performance.now();
@@ -139,9 +144,14 @@ let heldBall;
 let mouseStartX;
 let mouseStartY;
 let mouseDown = false;
+let running = false;
 const colors = ["#fca311", "#14213D"];
 
 canvas.addEventListener("mousedown", event => {
+	if(!running){
+		start();
+		running = true;
+	}
 	if(mouseDown){
 		return;
 	}
@@ -172,5 +182,6 @@ canvas.addEventListener("mouseup", event => {
 	mouseDown = false;
 });
 
-requestAnimationFrame(render);
-setInterval(update, 1);
+ctx.font = "30px Helvetica";
+ctx.textAlign = "center";
+ctx.fillText("Click, drag and release to toss a ball", width / 2, height / 2.5);

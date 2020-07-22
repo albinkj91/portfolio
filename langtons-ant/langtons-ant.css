@@ -71,3 +71,7 @@ button::-moz-focus-inner{
 	color: #000000;
 	margin-left: 10px;
 }
+
+#selected{
+	color: #fca311;
+}

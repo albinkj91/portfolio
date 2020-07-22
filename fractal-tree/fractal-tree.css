@@ -43,3 +43,7 @@ button{
 #stop:hover{
 	background-color: #fcc341;
 }
+
+#selected{
+	color: fca311;
+}
