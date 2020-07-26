@@ -8,27 +8,29 @@ body{
 
 #controls{
 	width: 260px;
+	margin: 10px;
 	float: left;
-}
-
-canvas{
-	background-color: #e5e5e5;
-}
-
-input{
-	width: 1000px;
 }
 
 button{
 	width: 100px;
-	margin: 10px;
+	margin: 10px 10px 10px 50px;
 	padding: 7px;
 	border: none;
 	border-radius: 2px;
 }
 
-#start{
-	background-color: #14213D;
+#run{
+	background-color: #14213d;
+	color: #ffffff;
+}
+
+#run:hover{
+	background-color: #40506d;
+}
+
+#stop{
+	background-color: #40506d;
 	color: #ffffff;
 }
 
@@ -36,14 +38,28 @@ button{
 	background-color: #40506d;
 }
 
-#stop{
-	background-color: #fca311;
-}
-
 #stop:hover{
-	background-color: #fcc341;
+	background-color: #14213d;
 }
 
 #selected{
-	color: fca311;
+	color: #fca311;
+}
+
+label{
+	margin-left: 30px;
+}
+
+input{
+	margin: 15px;
+	padding: 5px;
+	background-color: #e5e5e5;
+}
+
+input:hover{
+	background-color: #f0f0f0;
+}
+
+input:focus{
+	background-color: #f0f0f0;
 }
