@@ -1,6 +1,8 @@
 let width = innerHeight - 170;
 let tileWidth = width / 3;
 
+console.log(innerWidth);
+
 let content = document.querySelector("#content");
 content.style.width = width;
 let canvas = document.createElement("canvas");
@@ -161,7 +163,8 @@ function drawGrid(){
 }
 
 function drawBoardState(){
-	ctx.font = "200px Helvetica";
+	let fontSize = tileWidth * 0.81;
+	ctx.font = fontSize + "px Helvetica";
 	ctx.textAlign = "center";
 	for (let i = 0; i < gameBoard.length; i++) {
 		for (let j = 0; j < gameBoard[i].length; j++) {
