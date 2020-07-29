@@ -8,5 +8,7 @@ body{
 
 #content{
 	margin: auto;
+	background-color: #14213d;
+	border: #e5e5e5 2px solid;
 	border-radius: 10px;
 }

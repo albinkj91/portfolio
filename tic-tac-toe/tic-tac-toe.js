@@ -136,10 +136,8 @@ drawBoardState();
 /*********************************************************************************************************************************************/
 
 function drawGrid(){
-	ctx.strokeStyle = "#000000";
+	ctx.strokeStyle = "#e5e5e5";
 	ctx.lineWidth = 2;
-	ctx.rect(1, 1, width - 2, width - 2);
-	ctx.stroke();
 
 	ctx.beginPath();
 	ctx.moveTo(tileWidth, 0);
@@ -171,7 +169,7 @@ function drawBoardState(){
 				ctx.fillStyle = "#fca311";
 				ctx.fillText("X", j * tileWidth + tileWidth / 2, i * tileWidth + 0.8 * tileWidth);
 			}else if(gameBoard[i][j] == 'O'){
-				ctx.fillStyle = "#505050";
+				ctx.fillStyle = "#e5e5e5";
 				ctx.fillText("O", j * tileWidth + tileWidth / 2, i * tileWidth + 0.8 * tileWidth);
 			}
 		}
