@@ -1,7 +1,5 @@
-let width = innerHeight - 170;
+let width = innerWidth / 2.5;
 let tileWidth = width / 3;
-
-console.log(innerWidth);
 
 let content = document.querySelector("#content");
 content.style.width = width;
@@ -180,6 +178,22 @@ function drawBoardState(){
 	ctx.fill();
 }
 
+onresize = () => {
+	if(innerHeight < innerWidth){
+		width = innerWidth / 2.5;
+	}else{
+		width = innerHeight * 0.5;
+	}
+
+	tileWidth = width / 3;
+	content.style.width = width;
+	canvas.width = width;
+	canvas.height = width;
+	ctx.clearRect(0, 0, width, width);
+	drawBoardState();
+	drawGrid();
+}
+
 /*********************************************************************************************************************************************/
 /*************************************************************** Minimax AI ******************************************************************/
 /*********************************************************************************************************************************************/
@@ -252,11 +266,3 @@ function minScore(scores){
 	}
 	return min;
 }
-
-/*function copyGameBoard(gameBoard){
-	char[][] gameBoardCopy = new char[3][3];
-	for(int i = 0; i < gameBoard.length; i++){
-		gameBoardCopy[i] = gameBoard[i].clone();
-	}
-	return gameBoardCopy;
-}*/

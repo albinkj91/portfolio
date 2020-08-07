@@ -14,22 +14,28 @@ body{
 	align-items: center;
 }
 
-.header-item{
-	width: 700px;
-	margin: 30px;
-}
-
 #name{
 	color: #ffffff;
 	font-size: 35px;
 	font-weight: normal;
 }
 
+@media (min-width: 800px) { 
+	a{
+		font-size: 16px;
+	}
+}
+
+@media (max-width: 800px) { 
+	a{
+		font-size: 10px;
+	}
+}
+
 a{
 	color: #000000;
 	margin: 10px;
 	text-decoration: none;
-	font-size: 16px;
 	font-weight: bold;
 }
 

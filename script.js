@@ -1,9 +1,19 @@
+let width = innerWidth;
+let height = innerHeight / 2;
+
+let canvas = document.createElement("canvas");
+canvas.id = "canvas";
+canvas.width = width;
+canvas.height = height;
+let content = document.querySelector("#content");
+content.appendChild(canvas);
+let ctx = canvas.getContext("2d");
+
 class Node{
-	constructor(x, y, angle, size){
+	constructor(x, y, angle){
 		this.x = x;
 		this.y = y;
 		this.angle = angle;
-		this.size = size;
 	}
 
 	move(){
@@ -23,22 +33,33 @@ class Node{
 	}
 }
 
-let canvas = document.querySelector("canvas")
-let ctx = canvas.getContext("2d");
 ctx.lineWidth = 0.3;
 let nodes = [];
+let ratio = 47.51
+let numberOfNodes = (height + width) / ratio;
 
-for(let i = 0; i < 50; i++){
-	let x = Math.random() * canvas.width;
-	let y = Math.random() * canvas.height;
-	let angle = Math.random() * 360 * Math.PI / 180;
-	let nodeSize = (Math.random() * 1.1) + 0.4;
-	nodes[i] = new Node(x, y, angle, nodeSize);
+onresize = () => {
+	width = innerWidth;
+	height = innerHeight / 2;
+	canvas.width = width;
+	canvas.height = height;
+	numberOfNodes = (width + height) / ratio;
+	setNodes();
+	ctx.lineWidth = 0.3;
+}
+
+function setNodes(){
+	nodes = [];
+	for(let i = 0; i < numberOfNodes; i++){
+		let x = Math.random() * canvas.width;
+		let y = Math.random() * canvas.height;
+		let angle = Math.random() * 360 * Math.PI / 180;
+		nodes[i] = new Node(x, y, angle);
+	}
 }
 
 function checkCloseNodesAndDraw(){
-	ctx.clearRect(0, 0, 1910, 1100);
-
+	ctx.clearRect(0, 0, width, height);
 	for(let i = 0; i < nodes.length; i++){
 		nodes[i].move();
 		for (let j = 0; j < nodes.length; j++) {
@@ -56,4 +77,5 @@ function checkCloseNodesAndDraw(){
 	requestAnimationFrame(checkCloseNodesAndDraw);
 }
 
+setNodes();
 requestAnimationFrame(checkCloseNodesAndDraw);
