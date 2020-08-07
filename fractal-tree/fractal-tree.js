@@ -6,7 +6,10 @@ canvas.width = width;
 canvas.height = height;
 canvas.id = "canvas";
 let ctx = canvas.getContext("2d");
-document.querySelector("#content").appendChild(canvas);
+let content = document.querySelector("#content");
+content.width = width;
+content.height = height;
+content.appendChild(canvas);
 ctx.strokeStyle = "#14213D";
 
 let angleLabel = document.querySelector("#angleLabel");
@@ -91,9 +94,6 @@ lengthInput.oninput = () => {
 	ctx.stroke();
 }
 
-
-
-
 run.onclick = () => {
 	if(!running){
 		start();
@@ -101,6 +101,23 @@ run.onclick = () => {
 	}else{
 		stop();
 	}
+}
+
+onresize = () => {
+	ctx.clearRect(0, 0, width, height);
+	width = innerWidth - 300;
+	height = innerHeight - 70;
+	content.width = width;
+	content.height = height;
+	canvas.width = width;
+	canvas.height = height;
+	currentX = width / 2.0;
+	currentY = height / 1.3;
+	startLength = Math.round(height / 8);
+	ctx.strokeStyle = "#14213D";
+	ctx.beginPath();
+	fractalTree(angle, currentX, currentY, startLength);
+	ctx.stroke();
 }
 
 function start(){

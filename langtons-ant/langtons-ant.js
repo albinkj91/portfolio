@@ -6,7 +6,10 @@ canvas.width = width;
 canvas.height = height;
 canvas.id = "canvas";
 let ctx = canvas.getContext("2d");
-document.querySelector("#content").appendChild(canvas);
+let content = document.querySelector("#content");
+content.width = width;
+content.height = height;
+content.appendChild(canvas);
 
 let stepInput = document.querySelector("#steps");
 let ruleInput = document.querySelector("#rules");
@@ -188,19 +191,19 @@ ruleInput.oninput = () => {
 	let ruleAlternatives = ruleList.options;
 	switch(ruleInput.value){
 		case ruleAlternatives[0].value:
-			setInputs(10, 270, 125, 3);
+			setInputs(10, parseInt(width * 0.16), parseInt(height * 0.15), 3);
 			break;
 		case ruleAlternatives[1].value:
-			setInputs(1000, 270, 125, 3);
+			setInputs(1000, parseInt(width * 0.16), parseInt(height * 0.15), 3);
 			break;
 		case ruleAlternatives[2].value:
-			setInputs(100, 270, 142, 3);
+			setInputs(100, parseInt(width * 0.16), parseInt(height * 0.17), 3);
 			break;
 		case ruleAlternatives[3].value:
-			setInputs(50, 400, 125, 3);
+			setInputs(50, parseInt(width * 0.25), parseInt(height * 0.15), 3);
 			break;
 		case ruleAlternatives[4].value:
-			setInputs(200, 350, 30, 3);
+			setInputs(200, parseInt(width * 0.22), parseInt(height * 0.12), 3);
 			break;
 	}	
 };
@@ -220,3 +223,12 @@ clearButton.onclick = () => {
 		stepCountLabel.innerHTML = "";
 	}
 };
+
+onresize = () => {
+	width = innerWidth - 300;
+	height = innerHeight - 70;
+	canvas.width = width;
+	canvas.height = height;
+	content.width = width;
+	content.height = height;
+}
