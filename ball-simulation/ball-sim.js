@@ -1,11 +1,15 @@
 let width = innerWidth;
 let height = innerHeight - 70;
+console.log(height);
 
 let canvas = document.createElement("canvas");
 canvas.id = "canvas";
 canvas.width = width;
 canvas.height = height;
-document.querySelector("#content").appendChild(canvas);
+let content = document.querySelector("#content");
+content.width = width;
+content.height = height;
+content.appendChild(canvas);
 let ctx = canvas.getContext("2d");
 
 class Vector{
@@ -62,11 +66,9 @@ class Ball{
 		this.x += this.vector.x * 0.001;
 		this.y += this.vector.y * 0.001;
 
-		if(this.y > 714 && Math.abs(this.vector.x) > 0){
+		if(this.y > (height - this.radius) && Math.abs(this.vector.x) > 0){
 			this.vector.x -= this.vector.x * 0.003;
-			console.log(this.vector.x);
 		}
-		console.log(this.x);
 	}
 
 	checkBounds(){
@@ -140,7 +142,7 @@ canvas.addEventListener("mousedown", event => {
 		return;
 	}
 
-	heldBall = new Ball(event.offsetX, event.offsetY, 50, new Vector(0, 0), 0, colors[Math.floor(Math.random() * 2)]);
+	heldBall = new Ball(event.offsetX, event.offsetY, parseInt(width * 0.026), new Vector(0, 0), 0, colors[Math.floor(Math.random() * 2)]);
 	balls.push(heldBall);
 	mouseStartX = event.offsetX;
 	mouseStartY = event.offsetY;
@@ -166,6 +168,22 @@ canvas.addEventListener("mouseup", event => {
 	mouseDown = false;
 });
 
-ctx.font = "30px Helvetica";
+onresize = () => {
+	ctx.clearRect(0, 0, width, height);
+	width = innerWidth;
+	height = innerHeight - 70;
+	content.width = width;
+	content.height = height;
+	canvas.width = width;
+	canvas.height = height;
+
+	if(!running){
+		ctx.font = (width * 0.015625 + 5) + "px Helvetica";
+		ctx.textAlign = "center";
+		ctx.fillText("Click, drag and release to toss a ball", width / 2, height / 2.5);
+	}
+}
+
+ctx.font = (width * 0.015625 + 5) + "px Helvetica";
 ctx.textAlign = "center";
 ctx.fillText("Click, drag and release to toss a ball", width / 2, height / 2.5);
