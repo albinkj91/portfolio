@@ -1,6 +1,5 @@
 let width = innerWidth;
 let height = innerHeight - 70;
-console.log(height);
 
 let canvas = document.createElement("canvas");
 canvas.id = "canvas";
