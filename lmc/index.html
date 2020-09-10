@@ -1,0 +1,46 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Little Man Computer</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<h1>Little Man Computer - CPU Simulator</h1>
+	<div id="content">
+		<div id="program">
+			<textarea name="code" id="code" spellcheck="false" placeholder="Write code here"></textarea>
+			<button id="run">RUN</button>
+			<button id="load">LOAD</button>
+		</div>
+		<div id="cpu">
+			<div id="info">
+				<label>PROGRAM COUNTER:</label>
+				<h5 id="program-counter">00</h5>
+				<button id="step">STEP</button><br>
+				<label>MAR:</label>
+				<h5 id="mar">000</h5>
+				<label> - MDR:</label>
+				<h5 id="mdr">000</h5><br>
+				<label>CIR:</label>
+				<h5 id="cir">000</h5><br>
+				<label>ACCUMULATOR:</label>
+				<h5 id="accumulator">000</h5>
+			</div>
+			<div id="io">
+				<label>INPUT</label>
+				<label>OUTPUT</label>
+				<textarea name="input" id="input"></textarea>
+				<textarea name="output" id="output" readonly=true></textarea>
+			</div>
+		</div>
+		<div id="ram">
+
+		</div>
+		<div id="log">
+
+		</div>
+	</div>
+	<script src="script.js"></script>
+</body>
+</html>
