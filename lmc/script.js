@@ -118,10 +118,6 @@ function reset(){
 /*
  * RAM acesss
  */
-function getCellByIndex(index){
-	return parseInt(ramContainer.children[index].children[0].innerHTML);
-}
-
 function getCellValue(index){
 	return ramContainer.children[index].children[1].innerHTML;
 }
