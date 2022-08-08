@@ -10,6 +10,7 @@ content.width = width;
 content.height = height;
 content.appendChild(canvas);
 let ctx = canvas.getContext("2d");
+ctx.lineWidth = 5;
 
 class Vector{
 	constructor(x, y){
@@ -47,12 +48,7 @@ class Ball{
 	}
 
 	draw(ctx){
-		ctx.fillStyle = this.color;
-		ctx.beginPath();
-		ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
-		ctx.fill();
-
-		ctx.strokeStyle = "black";
+		ctx.strokeStyle = this.color;
 		ctx.beginPath();
 		ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
 		ctx.stroke();
@@ -62,30 +58,37 @@ class Ball{
 		let gravityVector = new Vector(0, this.gravity);
 		this.vector.add(gravityVector);
 
-		this.x += this.vector.x * 0.001;
-		this.y += this.vector.y * 0.001;
+		this.x += parseInt(this.vector.x * 0.003);
+		this.y += parseInt(this.vector.y * 0.003);
 
 		if(this.y > (height - this.radius) && Math.abs(this.vector.x) > 0){
-			this.vector.x -= this.vector.x * 0.003;
+			this.vector.x -= parseInt(this.vector.x * 0.003);
 		}
+	}
+
+	hasStopped(){
+		if(this.vector.x == 0 && this.vector.y == 0){
+			return true;
+		}
+		return false;
 	}
 
 	checkBounds(){
 		if(this.y > (height - this.radius)){
 			this.y = height - this.radius;
-			this.vector.y = -this.vector.y * 0.8;
+			this.vector.y = parseInt(-this.vector.y * 0.8);
 		}
 		if(this.x > (width - this.radius)){
 			this.x = width - this.radius;
-			this.vector.x = -this.vector.x * 0.7;
+			this.vector.x = parseInt(-this.vector.x * 0.7);
 		}
 		if(this.x < (0 + this.radius)){
 			this.x = 0 + this.radius;
-			this.vector.x = -this.vector.x * 0.7;
+			this.vector.x = parseInt(-this.vector.x * 0.7);
 		}
 		if(this.y < (0 + this.radius)){
 			this.y = 0 + this.radius;
-			this.vector.y = -this.vector.y * 0.9;
+			this.vector.y = parseInt(-this.vector.y * 0.9);
 		}
 	}
 
@@ -104,18 +107,42 @@ class Ball{
 	}
 }
 
-function render(){	
-	balls.forEach(ball => ball.draw(ctx));
-	requestAnimationFrame(render);
-}
+let start;
+let framesPerSecond = 0;
+let frameStart;
 
-function start(){
-	requestAnimationFrame(render);
-	setInterval(() => {
-		ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-		balls.forEach(ball => ball.move());
-	}, 1);
-	setInterval(() => balls.forEach(ball => ball.checkBounds()), 1);
+function step(timestamp){	
+	if(start == undefined){
+		start = timestamp;
+	}
+	if(frameStart == undefined){
+		frameStart = timestamp;
+	}
+	const elapsed = timestamp - start;
+	if(elapsed > 1000 / 200){
+		start = undefined;
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		balls.forEach(ball => {
+			ball.move();
+			ball.checkBounds();
+			ball.draw(ctx);
+			if(ball.hasStopped()){
+				console.log('stopped');
+			}
+			console.log(ball.vector.x);
+			console.log(ball.vector.y);
+		});
+		requestAnimationFrame(step, timestamp);
+		framesPerSecond++;
+	}
+
+	const elapsedFrameTime = timestamp - frameStart;
+	if(elapsedFrameTime > 1000){
+		console.log(framesPerSecond);
+		framesPerSecond = 0;
+		frameStart = timestamp;
+	}
+	requestAnimationFrame(step);
 }
 
 
@@ -134,14 +161,14 @@ const colors = ["#fca311", "#14213D"];
 
 canvas.addEventListener("mousedown", event => {
 	if(!running){
-		start();
+		requestAnimationFrame(step);
 		running = true;
 	}
 	if(mouseDown){
 		return;
 	}
 
-	heldBall = new Ball(event.offsetX, event.offsetY, parseInt(width * 0.026), new Vector(0, 0), 0, colors[Math.floor(Math.random() * 2)]);
+	heldBall = new Ball(event.offsetX, event.offsetY, parseInt(width * 0.026), new Vector(1, 1), 0, colors[Math.floor(Math.random() * 2)]);
 	balls.push(heldBall);
 	mouseStartX = event.offsetX;
 	mouseStartY = event.offsetY;
@@ -149,7 +176,7 @@ canvas.addEventListener("mousedown", event => {
 });
 
 canvas.addEventListener("mousemove", event => {
-	if(heldBall != null){
+	if(heldBall != undefined){
 		heldBall.x = event.offsetX;
 		heldBall.y = event.offsetY;
 	}
@@ -160,10 +187,10 @@ canvas.addEventListener("mouseup", event => {
 		return;
 	}
 
-	heldBall.vector.x = (event.offsetX - mouseStartX) * 30;
-	heldBall.vector.y = (event.offsetY - mouseStartY) * 30;
+	heldBall.vector.x = (event.offsetX - mouseStartX) * 20;
+	heldBall.vector.y = (event.offsetY - mouseStartY) * 20;
 	heldBall.gravity = 9.82 * 5;
-	heldBall = null;
+	heldBall = undefined;
 	mouseDown = false;
 });
 

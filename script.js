@@ -1,13 +1,13 @@
 let width = innerWidth;
 let height = innerHeight / 2;
 
-let canvas = document.createElement("canvas");
+const canvas = document.createElement("canvas");
 canvas.id = "canvas";
 canvas.width = width;
 canvas.height = height;
-let content = document.querySelector("#content");
+const content = document.querySelector("#content");
 content.appendChild(canvas);
-let ctx = canvas.getContext("2d");
+const ctx = canvas.getContext("2d");
 
 class Node{
 	constructor(x, y, angle){
@@ -57,22 +57,34 @@ function setNodes(){
 		nodes[i] = new Node(x, y, angle);
 	}
 }
+let frames = 0;
+let start;
+let prev = 0;
 
-function checkCloseNodesAndDraw(){
-	ctx.clearRect(0, 0, width, height);
-	for(let i = 0; i < nodes.length; i++){
-		nodes[i].move();
-		for (let j = 0; j < nodes.length; j++) {
-			let deltaX = Math.abs(nodes[i].x - nodes[j].x);
-			let deltaY = Math.abs(nodes[i].y - nodes[j].y);
+function checkCloseNodesAndDraw(timestamp){
+	if(start == undefined){
+		start = timestamp;
+	}
+	const elapsed = timestamp - start;
+	if(elapsed > 1000 / 60){
+		ctx.clearRect(0, 0, width, height);
+		for(let i = 0; i < nodes.length; i++){
+			nodes[i].move();
+			for (let j = 0; j < nodes.length; j++) {
+				let deltaX = Math.abs(nodes[i].x - nodes[j].x);
+				let deltaY = Math.abs(nodes[i].y - nodes[j].y);
 
-			let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-			ctx.strokeStyle = "rgba(0, 0, 0," + (1 - distance / 300) + ")";
-			ctx.beginPath();
-			ctx.moveTo(nodes[i].x, nodes[i].y);
-			ctx.lineTo(nodes[j].x, nodes[j].y);
-			ctx.stroke();
+				let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+				ctx.strokeStyle = "rgba(0, 0, 0," + (1 - distance / 300) + ")";
+				ctx.beginPath();
+				ctx.moveTo(nodes[i].x, nodes[i].y);
+				ctx.lineTo(nodes[j].x, nodes[j].y);
+				ctx.stroke();
+			}
 		}
+		start = undefined;
+		console.log('now');
+		requestAnimationFrame(checkCloseNodesAndDraw, timestamp);
 	}
 	requestAnimationFrame(checkCloseNodesAndDraw);
 }
