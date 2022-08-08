@@ -27,6 +27,10 @@ body{
 	font-weight: normal;
 }
 
+#selected{
+	color: #fca311;
+}
+
 @media (min-width: 800px) { 
 	a{
 		font-size: 16px;

@@ -1,10 +1,12 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Tic-Tac-Toe AI</title>
+	<title>Fractal Plant</title>
+	<link rel="stylesheet" href="fractal-plant.css">
 	<link rel="stylesheet" href="../header.css">
-	<link rel="stylesheet" href="tic-tac-toe.css">
 </head>
 <body>
 	<div id="header" class="flex-container">
@@ -12,14 +14,16 @@
 		<div class="header-item"></div>
 		<div id=links class="header-item">
 			<a href="../index.html">Node Garden</a>
-			<a href="../fractal-plant/fractal-plant.html">Fractal Plant</a>
-			<a id="selected" href="tic-tac-toe.html">Tic-Tac-Toe AI</a>
+			<a id="selected" href="../fractal-plant/fractal-plant.html">Fractal Plant</a>
+			<a href="../tic-tac-toe/tic-tac-toe.html">Tic-Tac-Toe AI</a>
 			<a href="../fractal-tree/fractal-tree.html">Fractal Tree</a>
 			<a href="../ball-simulation/ball-sim.html">Ball Simulation</a>
 			<a href="../langtons-ant/langtons-ant.html">Langton's Ant</a>
 		</div>
 	</div>
-	<div id="content"></div>
-	<script src=tic-tac-toe.js></script>
+	<div id="content">
+		<canvas id="canvas" width="800" height="800"></canvas>
+	</div>
+	<script src="fractal-plant.js"></script>
 </body>
 </html>
