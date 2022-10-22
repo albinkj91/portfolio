@@ -1,36 +1,35 @@
 let width = innerWidth - 300;
 let height = innerHeight - 70;
 
-let canvas = document.createElement("canvas");
+const canvas = document.createElement("canvas");
 canvas.width = width;
 canvas.height = height;
 canvas.id = "canvas";
-let ctx = canvas.getContext("2d");
-let content = document.querySelector("#content");
+const ctx = canvas.getContext("2d");
+const content = document.querySelector("#content");
 content.width = width;
 content.height = height;
 content.appendChild(canvas);
 ctx.strokeStyle = "#14213D";
 
-let angleLabel = document.querySelector("#angleLabel");
-let angleInput = document.querySelector("#angle");
-let lengthLabel = document.querySelector("#lengthLabel");
-let lengthInput = document.querySelector("#length");
-let run = document.querySelector("#run");
+const angleLabel = document.querySelector("#angleLabel");
+const angleInput = document.querySelector("#angle");
+const lengthLabel = document.querySelector("#lengthLabel");
+const lengthInput = document.querySelector("#length");
+const run = document.querySelector("#run");
 
 ctx.lineWidth = 1;
 
 let currentX = width / 2.0;
 let currentY = height / 1.3;
 let startLength = Math.round(height / 8);
-let angle = toRadians(270);
-let degrees = 0;
+let angle = 3*Math.PI/2;
+let currentAngle = 0;
 let interval;
 let running = false;
-let expanding = true;
 
 lengthLabel.innerHTML = "Length: " + startLength;
-angleLabel.innerHTML = degrees + "\u00B0";
+angleLabel.innerHTML = currentAngle + "\u00B0";
 lengthInput.value = startLength;
 
 ctx.beginPath();
@@ -46,40 +45,46 @@ function fractalTree(newAngle, x, y, newLength){
 	if(newLength < 15){
 		return;
 	}else{
-		let angle1 = newAngle + toRadians(degrees);
-		let angle2 = newAngle - toRadians(degrees);
+		let angle1 = newAngle + currentAngle;
+		let angle2 = newAngle - currentAngle;
 		let length = newLength /= 1.2;
 		fractalTree(angle1, newX, newY, length);
 		fractalTree(angle2, newX, newY, length);
 	}
 }
 
-function updateAngle(){
-	ctx.clearRect(0, 0, width, height)
-	if(degrees < 180 && expanding){
-		degrees += 0.05;
-	}else{
-		expanding = false;
-	}
-	if(degrees > -180 && !expanding){
-		degrees -= 0.05;
-	}else{
-		expanding = true;
-	}
-	
-	ctx.beginPath();
-	fractalTree(angle, currentX, currentY, startLength);
-	ctx.stroke();
-}
+let elapsed, initial;
+let animationId;
+let stepSize = Math.PI / 700;
 
-function toRadians(value){
-	return value * (Math.PI / 180);
+function updateAngle(timestamp){
+	if(initial === undefined){
+		initial = timestamp;
+	}
+	elapsed = timestamp - initial;
+
+	if(running && elapsed > 1000 / 60){
+		elapsed = 0;
+		initial = timestamp;
+
+		if(currentAngle > 2 * Math.PI){
+			currentAngle = 0;
+		}
+
+		currentAngle += stepSize;
+		
+		ctx.clearRect(0, 0, width, height)
+		ctx.beginPath();
+		fractalTree(angle, currentX, currentY, startLength);
+		ctx.stroke();
+	}
+	requestAnimationFrame(updateAngle);
 }
 
 angleInput.oninput = () => {
 	ctx.clearRect(0, 0, width, height)
-	degrees = parseInt(angleInput.value);
-	angleLabel.innerHTML = degrees + "\u00B0";
+	currentAngle = parseInt(angleInput.value) * Math.PI / 180;
+	angleLabel.innerHTML = Math.round(currentAngle * 180 / Math.PI) + "\u00B0";
 	ctx.beginPath();
 	fractalTree(angle, currentX, currentY, startLength);
 	ctx.stroke();
@@ -121,13 +126,13 @@ onresize = () => {
 }
 
 function start(){
-	interval = setInterval(updateAngle, 10);
+	requestAnimationFrame(updateAngle);
 	run.innerHTML = "Stop";
 	run.id = "stop";
 };
 
 function stop(){
-	clearInterval(interval);
+	cancelAnimationFrame(animationId)
 	run.innerHTML = "Run";
 	run.id = "run";
 	running = false;
