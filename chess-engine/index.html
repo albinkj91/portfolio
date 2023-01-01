@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Chess Engine</title>
+	<link rel="stylesheet" href="index.css">
+	<link rel="shortcut icon" href="#">
+	<link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/fantasque-sans-mono" type="text/css"/> 
+</head>
+<body>
+	<div id="content">
+		<div id="taken">
+			<div id="taken-white"></div>
+			<div id="taken-black"></div>
+		</div>
+		<div id="board-area">
+		<div id="popup" hidden>
+			<h1 id="title">Choose a promotion piece:</h1>
+			<div id="pieces"></div>
+		</div>
+			<div id="files">
+				<h1>a</h1>
+				<h1>b</h1>
+				<h1>c</h1>
+				<h1>d</h1>
+				<h1>e</h1>
+				<h1>f</h1>
+				<h1>g</h1>
+				<h1>h</h1>
+			</div>
+			<div id="bottom">
+				<div id="ranks">
+					<h1>8</h1>
+					<h1>7</h1>
+					<h1>6</h1>
+					<h1>5</h1>
+					<h1>4</h1>
+					<h1>3</h1>
+					<h1>2</h1>
+					<h1>1</h1>
+				</div>
+				<div id="board"></div>
+			</div>
+		</div>
+		<div id="log">
+			<textarea name="log" id="log-text" cols="60" rows="50" autocomplete="off" readonly></textarea>
+		</div>
+	</div>
+	<script src="index.js"></script>
+</body>
+</html>

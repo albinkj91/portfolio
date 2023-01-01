@@ -1,0 +1,164 @@
+html{
+	height: 100%;
+}
+
+body{
+	background-color: #308080;
+	margin: 0px;
+	height: 100%;
+}
+
+#content{
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+	column-gap: 100px;
+	align-items: center;
+}
+
+#taken{
+	display: flex;
+	flex-direction: column;
+	row-gap: 20px;
+	margin-left: auto;
+}
+
+#taken-white{
+	display: flex;
+	flex-wrap: wrap;
+	min-height: 328px;
+	width: 82px;
+	border: #502020 2px solid;
+	border-radius: 5px;
+	margin-left: auto;
+	padding: 5px;
+}
+
+#taken-black{
+	display: flex;
+	flex-wrap: wrap;
+	min-height: 328px;
+	width: 82px;
+	border: #eeddaa 2px solid;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+#log{
+	display: flex;
+	margin-left: auto;
+	align-self: stretch;
+}
+
+textarea{
+	align-self: stretch;
+	border: none;
+	margin: 0;
+	padding-left: 10px;
+	color: #eeddaa;
+	background-color: #303030;
+	resize: none;
+	font-size: 16px;
+	font-family: 'FantasqueSansMonoRegular';
+	font-weight: normal;
+	font-style: normal;
+	overflow-y: scroll;
+}
+
+textarea:focus-visible{
+	border: none;
+	outline: none;
+}
+
+#taken-white img{
+	width: 40px;
+}
+
+#taken-black img{
+	width: 40px;
+}
+
+#files{
+	display: flex;
+	justify-content: space-evenly;
+	gap: 28px;
+	margin-left: 43px;
+}
+
+#files h1{
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+#bottom{
+	display: flex;
+}
+
+#ranks{
+	width: 40px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+}
+
+#board{
+	width: 730px;
+	display: grid;
+	grid-template-columns: repeat(8, 1fr);
+	background-color: #502020;
+	border: #eeddaa solid 4px;
+	border-radius: 5px;
+	padding: 5px;
+	box-shadow: 5px 5px 10px;
+}
+
+.tile{
+	height: 90px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+img::selection {
+	background-color: transparent;
+	color: #000;
+}
+
+img::-moz-selection {
+	background-color: transparent;
+	color: #000;
+}
+
+.mark{
+	height: 40px;
+	width: 40px;
+	border-radius: 20px;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+#popup{
+	position: absolute;
+	flex-direction: column;
+	align-items: center;
+	width: 800px;
+	height: 250px;
+	background-color: #eeddaa;
+	margin-top: 200px;
+	margin-left: 13px;
+	border: 2px black solid;
+	border-radius: 10px;
+	text-align: center;
+}
+
+#popup h1{
+	font-size: 40px;
+}
+
+#popup img{
+	width: 100px;
+	border-radius: 5px;
+}
+
+#popup img:hover{
+	background-color: #308080;
+}
