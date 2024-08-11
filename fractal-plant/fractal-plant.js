@@ -79,10 +79,11 @@ const drawLine = () => {
 	ctx.beginPath();
 	ctx.moveTo(x, y);
 
-	x += r * Math.cos(angle);
+	x += (r * Math.random() * 2) * Math.cos(angle);
 	y += r * Math.sin(angle);
 
 	ctx.lineTo(x, y);
+	ctx.lineWidth = Math.random() * 2 + 1;
 	ctx.stroke();
 };
 
@@ -96,7 +97,6 @@ let index = 0;
 
 const step = (timestamp) => {
 	if(index >= axiom.length){
-		console.log('n reached');
 		return;
 	}
 
