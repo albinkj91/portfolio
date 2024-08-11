@@ -126,11 +126,6 @@ function step(timestamp){
 			ball.move();
 			ball.checkBounds();
 			ball.draw(ctx);
-			if(ball.hasStopped()){
-				console.log('stopped');
-			}
-			console.log(ball.vector.x);
-			console.log(ball.vector.y);
 		});
 		requestAnimationFrame(step, timestamp);
 		framesPerSecond++;
@@ -138,7 +133,6 @@ function step(timestamp){
 
 	const elapsedFrameTime = timestamp - frameStart;
 	if(elapsedFrameTime > 1000){
-		console.log(framesPerSecond);
 		framesPerSecond = 0;
 		frameStart = timestamp;
 	}

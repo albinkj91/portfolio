@@ -83,7 +83,6 @@ function checkCloseNodesAndDraw(timestamp){
 			}
 		}
 		start = undefined;
-		console.log('now');
 		requestAnimationFrame(checkCloseNodesAndDraw, timestamp);
 	}
 	requestAnimationFrame(checkCloseNodesAndDraw);
