@@ -2,6 +2,7 @@ let width = innerWidth / 2.5;
 let tileWidth = width / 3;
 
 let content = document.querySelector("#content");
+let state = document.querySelector("#state");
 content.style.width = width;
 let canvas = document.createElement("canvas");
 canvas.width = width;
@@ -112,17 +113,17 @@ canvas.addEventListener("mousedown", e => {
 	drawBoardState();
 
 	if(isDraw(gameBoard)){
-		alert("Draw!");
 		clearBoard();
 		drawBoardState();
+		state.innerHTML = "Draw!";
 	}else if(hasWon('X')){
-		alert("You Win!");
 		clearBoard();
 		drawBoardState();
+		state.innerHTML = "This is impossible...";
 	}else if(hasWon('O')){
-		alert("AI Wins!");
 		clearBoard();
 		drawBoardState();
+		state.innerHTML = "AI wins!";
 	}
 
 	playerTurn = true;

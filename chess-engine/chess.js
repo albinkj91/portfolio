@@ -1,8 +1,8 @@
-const bottom = document.getElementById('bottom');
-const board = document.getElementById('board');
-const takenWhiteArea = document.getElementById('taken-white');
-const takenBlackArea = document.getElementById('taken-black');
-const logArea = document.getElementById('log-text');
+const bottom = document.querySelector('#bottom');
+const board = document.querySelector('#board');
+const takenWhiteArea = document.querySelector('#taken-white');
+const takenBlackArea = document.querySelector('#taken-black');
+const logArea = document.querySelector('#log-text');
 
 const WHITE = 0;
 const BLACK = 1;
@@ -83,7 +83,7 @@ const getPieceByTile = (tile) =>{
 };
 
 const getTile = (rank, file) =>{
-	return document.getElementById(`${rank}${file}`);
+	return document.querySelector(`${rank}${file}`);
 };
 
 whitePawns.forEach(p => setPiece(p.rank, p.file, p));
@@ -406,10 +406,10 @@ const getAndPlacePromotionPiece = (piece) =>{
 		color = 'white';
 	}
 
-	let popup = document.getElementById('popup');
+	let popup = document.querySelector('#popup');
 	popup.hidden = false;
 	popup.style.display = 'flex';
-	let pieces = document.getElementById('pieces');
+	let pieces = document.querySelector('#pieces');
 
 	for(let i = 0; i < 4; i++){
 		let selectionPiece = {type: promotionPieces[i], element: document.createElement('img')};

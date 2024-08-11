@@ -12,3 +12,10 @@ body{
 	border: #e5e5e5 2px solid;
 	border-radius: 10px;
 }
+
+#state{
+	font-family: Arial, Helvetica, sans-serif;
+	margin: auto;
+	margin-bottom: 10px;
+	width: fit-content;
+}
