@@ -1,17 +1,31 @@
 const body = document.querySelector('body');
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
+const upcomingTetrominoCtx = document.querySelector('#upcoming-tetromino').getContext('2d');
 const score = document.querySelector('#score');
-const startButton = document.querySelector('#start');
-const stopButton = document.querySelector('#stop');
-const resetButton = document.querySelector('#reset');
+const playButton = document.querySelector('#play');
+const restartButton = document.querySelector('#restart');
 const audio = document.querySelector('#audio');
-const volume = document.querySelector('#volumeRange');
+const volume = document.querySelector('#volume-range');
+const playImg = document.querySelector('#play-img');
 
 const canvasWidth = ctx.width;
 const canvasHeight = ctx.height;
 const phi = Math.PI / 2.0;
+
 let delta = 500;
+let game;
+let reqId;
+let previousState;
+let resetKey;
+let keyDown = false;
+
+const GameState = Object.freeze({
+	START: 1,
+	RUNNING: 2,
+	PAUSED: 3,
+	GAME_OVER: 4
+});
 
 const Colors = Object.freeze({
 	TEAL: 1,
@@ -44,10 +58,12 @@ class Mat2{
 
 
 class Tetromino{
-	constructor(blocks, position, color){
+	constructor(blocks, position, color, midOffsetX, midOffsetY){
 		this.blocks = blocks;
 		this.position = position;
 		this.color = color;
+		this.midOffsetX = midOffsetX;
+		this.midOffsetY = midOffsetY;
 	}
 
 	rotate(phi){
@@ -59,6 +75,7 @@ class Tetromino{
 
 class Game{
 	constructor(){
+		this.state = GameState.START;
 		this.score = 0;
 		this.oBlocks = [new Vec2(0, 0), new Vec2(1, 0), new Vec2(0, 1), new Vec2(1, 1)];
 		this.iBlocks = [new Vec2(-1, 0), new Vec2(0, 0), new Vec2(1, 0), new Vec2(2, 0)];
@@ -70,13 +87,13 @@ class Game{
 
 		this.startPos1 = new Vec2(4, 0);
 		this.startPos2 = new Vec2(4, 1);
-		this.o = new Tetromino(this.oBlocks, this.startPos1, Colors.YELLOW);
-		this.i = new Tetromino(this.iBlocks, this.startPos1, Colors.TEAL);
-		this.t = new Tetromino(this.tBlocks, this.startPos2, Colors.PURPLE);
-		this.j = new Tetromino(this.jBlocks, this.startPos2, Colors.BLUE);
-		this.l = new Tetromino(this.lBlocks, this.startPos2, Colors.ORANGE);
-		this.s = new Tetromino(this.sBlocks, this.startPos1, Colors.GREEN);
-		this.z = new Tetromino(this.zBlocks, this.startPos1, Colors.RED);
+		this.o = new Tetromino(this.oBlocks, this.startPos1, Colors.YELLOW, -30, -30);
+		this.i = new Tetromino(this.iBlocks, this.startPos1, Colors.TEAL, -30, -15);
+		this.t = new Tetromino(this.tBlocks, this.startPos2, Colors.PURPLE, -15, 0);
+		this.j = new Tetromino(this.jBlocks, this.startPos2, Colors.BLUE, -15, 0);
+		this.l = new Tetromino(this.lBlocks, this.startPos2, Colors.ORANGE, -15, 0);
+		this.s = new Tetromino(this.sBlocks, this.startPos1, Colors.GREEN, -15, -30);
+		this.z = new Tetromino(this.zBlocks, this.startPos1, Colors.RED, -15, -30);
 
 		this.tetrominos = [this.i, this.o, this.t, this.j, this.l, this.s, this.z];
 		this.img;
@@ -104,6 +121,7 @@ class Game{
 			[0,0,0,0,0,0,0,0,0,0]
 		];
 		this.currentTetromino;
+		this.upcomingTetromino;
 	}
 
 	isCollisionDown(tetromino){
@@ -149,36 +167,40 @@ class Game{
 		}
 	}
 
+	drawBlock(color, dx, dy, x, y, ctx){
+		switch(color){
+			case Colors.TEAL:
+				ctx.fillStyle = '#20dfdfaa';
+				break;
+			case Colors.YELLOW:
+				ctx.fillStyle = '#dfdf20aa';
+				break;
+			case Colors.PURPLE:
+				ctx.fillStyle = '#9f20dfaa';
+				break;
+			case Colors.BLUE:
+				ctx.fillStyle = '#2020dfaa';
+				break;
+			case Colors.ORANGE:
+				ctx.fillStyle = '#df9f20aa';
+				break;
+			case Colors.GREEN:
+				ctx.fillStyle = '#20df20aa';
+				break;
+			case Colors.RED:
+				ctx.fillStyle = '#df2020aa';
+				break;
+			default:
+				ctx.fillStyle = '#000000aa';
+		}
+		ctx.drawImage(this.img, dx + x*30, dy + y*30);
+		ctx.fillRect(dx + x*30, dy + y*30, 29, 29);
+	}
+
 	renderField(){
 		for(let i = 0; i < this.field.length; i++){
 			for(let j = 0; j < this.field[i].length; j++){
-				switch(this.field[i][j]){
-					case Colors.TEAL:
-						ctx.fillStyle = '#20dfdfaa';
-						break;
-					case Colors.YELLOW:
-						ctx.fillStyle = '#dfdf20aa';
-						break;
-					case Colors.PURPLE:
-						ctx.fillStyle = '#9f20dfaa';
-						break;
-					case Colors.BLUE:
-						ctx.fillStyle = '#2020dfaa';
-						break;
-					case Colors.ORANGE:
-						ctx.fillStyle = '#df9f20aa';
-						break;
-					case Colors.GREEN:
-						ctx.fillStyle = '#20df20aa';
-						break;
-					case Colors.RED:
-						ctx.fillStyle = '#df2020aa';
-						break;
-					default:
-						ctx.fillStyle = '#000000aa';
-				}
-				ctx.drawImage(this.img, j*30, i*30);
-				ctx.fillRect(j*30, i*30, 29, 29);
+				this.drawBlock(this.field[i][j], 0, 0, j, i, ctx);
 			}
 		}
 	}
@@ -186,7 +208,11 @@ class Game{
 	randomTetromino(){
 		const random = Math.floor(Math.random() * 7);
 		const temp = this.tetrominos[random];
-		return new Tetromino(structuredClone(temp.blocks), temp.position, temp.color);
+		return new Tetromino(structuredClone(temp.blocks),
+			temp.position,
+			temp.color,
+			temp.midOffsetX,
+			temp.midOffsetY);
 	}
 
 	checkRows(){
@@ -215,6 +241,18 @@ class Game{
 			}
 		}
 	}
+
+	setUpcomingTetromino(){
+		this.upcomingTetromino = this.randomTetromino();
+		upcomingTetrominoCtx.clearRect(0, 0, 180, 200);
+		const offsetX = 90 + this.upcomingTetromino.midOffsetX;
+		const offsetY = 100 + this.upcomingTetromino.midOffsetY;
+		for(let i = 0; i < this.upcomingTetromino.blocks.length; i++){
+			const x = this.upcomingTetromino.blocks[i].x;
+			const y = this.upcomingTetromino.blocks[i].y;
+			this.drawBlock(this.upcomingTetromino.color, offsetX, offsetY, x, y, upcomingTetrominoCtx);
+		}
+	}
 }
 
 const update = () =>{
@@ -222,7 +260,9 @@ const update = () =>{
 		new Vec2(
 			game.currentTetromino.position.x,
 			game.currentTetromino.position.y),
-		game.currentTetromino.color);
+		game.currentTetromino.color,
+		game.currentTetromino.midOffsetX,
+		game.currentTetromino.midOffsetY);
 
 	game.currentTetromino.position.y += 1;
 	game.remove(previousState);
@@ -234,7 +274,7 @@ const update = () =>{
 		while(row !== 0){
 			rowCount++;
 			if(delta > 50){
-				delta -= 25;
+				delta -= 10;
 			}
 			game.clear(row);
 			row = game.checkRows();
@@ -255,43 +295,52 @@ const update = () =>{
 				break;
 		}
 		score.innerHTML = game.score;
-		const newTetromino = game.randomTetromino();
 		
-		game.currentTetromino = new Tetromino(structuredClone(newTetromino.blocks),
-			new Vec2(newTetromino.position.x, newTetromino.position.y),
-			newTetromino.color);
+		game.currentTetromino = new Tetromino(structuredClone(game.upcomingTetromino.blocks),
+			new Vec2(game.upcomingTetromino.position.x, game.upcomingTetromino.position.y),
+			game.upcomingTetromino.color,
+			game.upcomingTetromino.midOffsetX,
+			game.upcomingTetromino.midOffsetY);
+		game.setUpcomingTetromino();
 	}
 	if(game.isCollisionDown(game.currentTetromino) || game.isCollisionSide(game.currentTetromino)){
-		score.innerHTML = "GAME OVER";
+		game.state = GameState.GAME_OVER;
 		cancelAnimationFrame(reqId);
 		reqId = undefined;
-		ctx.fillStyle = '#00000050';
+		ctx.fillStyle = '#000000aa';
 		ctx.fillRect(0, 0, 300, 600);
+		ctx.fillStyle = '#df2020';
+		ctx.font = '48px serif';
+		ctx.fillText("GAME OVER", 8, 300);
+		playButton.id = 'play';
+		playImg.src = 'assets/play.png';
+		audio.pause();
 	}
 	game.place(game.currentTetromino);
 }
 
-let game;
-let reqId;
-let previousState;
-let resetKey;
-
-startButton.addEventListener('click', () =>{
+playButton.addEventListener('click', async () =>{
 	body.addEventListener('keydown', keyEventHandler);
-	audio.play();
-	if(reqId === undefined)
+	if(!reqId){
+		if(game.state === GameState.GAME_OVER){
+			await init();
+			game.state = GameState.RUNNING;
+		}
+		playButton.id = 'pause';
+		audio.play();
 		reqId = requestAnimationFrame(step)
+		playImg.src = 'assets/pause.png';
+	}else{
+		playButton.id = 'play';
+		cancelAnimationFrame(reqId)
+		reqId = undefined;
+		audio.pause();
+		playImg.src = 'assets/play.png';
+	}
 });
 
-stopButton.addEventListener('click', () =>{
-	cancelAnimationFrame(reqId)
-	reqId = undefined;
-	audio.pause();
-});
+restartButton.addEventListener('click', () => init());
 
-resetButton.addEventListener('click', () => init());
-
-let keyDown = false;
 const keyEventHandler = (e) =>{
 	if(keyDown)
 		return;
@@ -373,7 +422,7 @@ const step = (timestamp) =>{
 		update();
 		start = timestamp;
 	}
-	if(reqId !== undefined){
+	if(reqId){
 		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 		game.renderField();
 		reqId = requestAnimationFrame(step);
@@ -387,11 +436,18 @@ const init = async() =>{
 
 	game.currentTetromino = new Tetromino(structuredClone(randomTetromino.blocks),
 		new Vec2(randomTetromino.position.x, randomTetromino.position.y),
-		randomTetromino.color);
+		randomTetromino.color,
+		randomTetromino.midOffsetX,
+		randomTetromino.midOffsetY);
+
 
 	previousState = game.currentTetromino;
 	score.innerHTML = game.score;
-	game.img = await loadImage('block2.png');
+	if(!game.img){
+		game.img = await loadImage('assets/block2.png');
+	}
+	game.setUpcomingTetromino();
+	ctx.clearRect(0, 0, 300, 600);
 	game.renderField();
 	game.place(game.currentTetromino);
 	game.renderField();

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="shortcut icon" href="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F566%2F566312.png&f=1&nofb=1&ipt=ec972e02227c5de7e04e65e91ce21d0c3e406fd31f2b87ec8fb4f63754674203&ipo=images" type="image/x-icon">
+	<link rel="stylesheet" href="tetris.css">
+</head>
+<body>
+	<div id="container">
+		<div id="upcoming">
+			<canvas id="upcoming-tetromino" width="180" height="200"></canvas>
+		</div>
+		<div id="game">
+			<canvas id="canvas" width="300" height="600"></canvas>
+			<div id="buttons">
+				<button id="play"><img id="play-img" src="assets/play.png" alt="play button"></button>
+				<button id="restart"><img src="assets/restart.png" alt="restart button"></button>
+			</div>
+			<div id="volume">
+				<input type="range" min="0.0" max="1.0" value="1.0" step="0.01" class="slider" id="volume-range">
+			</div>
+			<audio id="audio" loop src="assets/tetris-theme.mp3"></audio>
+		</div>
+		<div id="status">
+			<div id="score-container">
+				<label>Score:</label>
+				<label id="score">0</label>
+			</div>
+		</div>
+	</div>
+	<script src="tetris.js"></script>
+</body>
+</html>
